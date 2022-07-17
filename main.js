@@ -6,9 +6,25 @@
 var allPossibleSplit = []
 var allTiles = [] // [1, 1, 2, 2, 3, 3, 12, 12, 12]
 
+let gameAttr = {
+    winTile: 0, 
+    dealer: false,
+    honba: 0,
+    playerWind: 0, // 30x
+    roundWind: 0,
+    riichiPlayers: [],
+    wRiichi: false,
+    discarder: 0,
+    riichiNum: 0, // 全局变量
+    doras: [],
+    innerDoras: [],
+    redDoraNum: 0,
+    northDoraNum: 0
+}
+
 function init() {
-    win = false;
-    // TODO allTiles
+    winTile = 0
+    // TODO allTile
     // 红宝牌数值转换
 }
 
@@ -31,10 +47,11 @@ function calScore(obj) {
     allPossibleSplit.forEach(com => {
         if (com.length != 0) {
             // 判断和拆分有关的役种
-            // 
+            // isduanyao()
             // isYiQi(com) // 789 99
             // isSanSeKe(com)
             //[[1,2,3],[2,3,4]]
+
 
         }
         // 判断和牌数值有关的役种
@@ -45,6 +62,7 @@ function calScore(obj) {
     // 1. 先看平和，如果没有，优先单骑、坎张和边张
     // 2. 七对子25符固定，门清自摸平和固定20符，门清荣和加10符，其他不满30符加到30
 }
+
 
 function splitTileList(hand, combination) {
     if (hand.length === 0) {
@@ -63,18 +81,22 @@ function splitTileList(hand, combination) {
             return false
         }
         for (let it in double) {
-            return splitTileList(hand.slice(hand.findIndex(d => d === it), 2), combination + [{type: 0, first: it, visible: false}])
+            return splitTileList(hand.slice(hand.findIndex(d => d === it), 2), combination.concat([{type: 0, first: it, visible: false}]))
         }
     }
+    // chai kezi
     const curRes = (
         hand[0] === hand[1] && hand [0] === hand[2]
-    ) ? splitTileList(hand.slice(0, 3),combination + [{type: 2, first: hand[0], visiable: false}])
+    ) ? splitTileList(hand.slice(0, 3),combination.concat([{type: 2, first: hand[0], visiable: false}]))
     : false
     // 拆顺子
+    if (hand[0] > 30) {
+        return false
+    }
     const second = hand.findIndex(d => d === hand[0] + 1)
     const third = hand.findIndex(d => d === hand[0] + 2)
     if (second > 0  && third > 0) {
-        return splitTileList(hand.slice(0,1).slice(second - 1, 1).slice(third -2, 1), combination +[{type: 1, first: hand[0], visable: false}]) || curRes
+        return splitTileList(hand.slice(0,1).slice(second - 1, 1).slice(third -2, 1), combination.concat([{type: 1, first: hand[0], visable: false}])) || curRes
     }
     return false
 }
