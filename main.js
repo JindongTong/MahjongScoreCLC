@@ -44,15 +44,33 @@ function calScore(obj) {
     if (allPossibleSplit.length == 0) {
         return 0;  // 不和
     }
-    allPossibleSplit.forEach(com => {
-        if (com.length != 0) {
+    allPossibleSplit.forEach(comb => {
+        if (comb.length != 0) {
             // 判断和拆分有关的役种
             // isduanyao()
             // isYiQi(com) // 789 99
             // isSanSeKe(com)
             //[[1,2,3],[2,3,4]]
-
-
+            let yakuRes = {
+                'tanyo': isTanyao(),//断幺
+                'flatHand': isFlatHand(),//平和
+                'mixedFlush': isMixedFlush(),//狭义混一色 不能是字一色或者清一色
+                'pureFlush': isPureFlush(),//清一色
+                'sevenPairs': isSevenPairs(),//七对子
+                'doubleSequence': isDoubleSequence(),//狭义一杯口 不能是七对子或二杯口
+                'wDoubleSequence': isWDoubleSequence(),//二杯口
+                'tripleTriplets': isTripleTriplets(),//三色同刻
+                'tripleSeqence': isTripleSeqence(),//三色同顺
+                'allTriplets': isAllTriplets(),// 对对和
+                'threeConcealedTriplets': isThreeConcealedTriplets(),//三暗刻
+                'littleThreeDragons': isLittleThreeDragons(),//小三元
+                'pureTerminalHand': isPureTerminalHand(),//狭义混老头 不能是清老头 更不能是字一色
+                'terminalOrHonorInEveryGroup': isTerminalOrHonorInEveryGroup(),//狭义混全 不能是纯全 肯定更不能是字一色
+                'straight': isStraight(),//一气通贯
+                'terminalInEveryGroup': isTerminalInEveryGroup(),//纯全
+            }
+            
+            calFu(comb, gameAttr, yakuRes['flatHand'])
         }
         // 判断和牌数值有关的役种
         // 断幺九、混老头、清/混一色、表里红北宝牌
