@@ -81,6 +81,11 @@ function calfu(combination, attrs, winFlatHand) {
     // angang // yiaojiu
 }
 
+function testB() {
+    console.log("test B")
+}
+
+
 /*
 function quetou() {
     const threeDragonTiles = [35, 36, 37]

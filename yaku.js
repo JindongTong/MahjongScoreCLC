@@ -59,7 +59,7 @@ function isPureFlush(hand, visable) {
     }
     return 0
 }
-//combination的内容是不是排序过？应该是
+
 function isWDoubleSequence(combination) {
     if (!combination.length) {
         return 0
@@ -80,7 +80,6 @@ function isDoubleSequence(combination) {
     if (combination.filter(d => d.visable).length) {
         return 0
     }
-    if (combination[1].first === combination[2].first && combination[1].type === combination[2].type)
     for (let i = 1; i < 4; i++) {
         if (combination[i].type === 1 && combination[i + 1].type === 1 
             && combination[i].first === combination[i + 1].first) {
@@ -95,3 +94,30 @@ function isDoubleSequence(combination) {
     }
     return 0
 }
+
+ /*
+function isTripleTriplets(combination) {
+    if(!combination.length) {
+        return 0
+    }
+    let triplets = combination.filter(d => d.type > 1 && d.first < 30)
+    if (triplets.length < 3) {// 3 4
+        return 0
+    }
+    if (triplets[0].first % 10 === triplets[1] % 10 && triplets[0].first === triplets[2] % 10) {
+        return 2
+    }
+    return 0
+}
+
+function isTripleSeqence(combination, visable) {
+    if(!combination.length) {
+        return 0
+    }
+    let sequence = combination.filter(d => d.type === 1)
+    if (sequence.length < 3) {
+        return 0
+    }
+    if (sequence[0].first % 10 === sequence[1].first % 10 && sequence[1].first % 10 === sequence[2].first % 10)
+}
+*/

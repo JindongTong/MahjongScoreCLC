@@ -4,7 +4,9 @@
  * [{ type: duizi/shun/ke/gang, first: 13, visible: true},{}]
 */
 var allPossibleSplit = []
-var allTiles = [] // [1, 1, 2, 2, 3, 3, 12, 12, 12]
+var allTiles = [] // [1, 1, 2, 2, 3, 3, 12, 12, 12] 
+var maxScore = 0
+var finalYakus = {}
 
 let gameAttr = {
     winTile: 0, 
@@ -19,19 +21,31 @@ let gameAttr = {
     doras: [],
     innerDoras: [],
     redDoraNum: 0,
-    northDoraNum: 0
+    northDoraNum: 0,
 }
 
 function init() {
     winTile = 0
     // TODO allTile
     // 红宝牌数值转换
+    maxScore = 0
+    finalYakus = {}
+}
+
+function convertComb(rawObj) {
+
+}
+
+function testA() {
+    console.log('test A')
+    testB()
 }
 
 // entry
 // obj: hand, combination, hudeshui, henazhang, dora, innerDora,
 // paijuzhuangkuang (e.g liji, dora, ...)
-function calScore(obj) {
+function calScore(rawObj) {
+    let obj = convertComb(rawObj)
     hand.sort()
     init()
     if (obj.combination.length === 0) {
@@ -44,6 +58,7 @@ function calScore(obj) {
     if (allPossibleSplit.length == 0) {
         return 0;  // 不和
     }
+    
     allPossibleSplit.forEach(comb => {
         if (comb.length != 0) {
             // 判断和拆分有关的役种
@@ -63,14 +78,54 @@ function calScore(obj) {
                 'tripleSeqence': isTripleSeqence(),//三色同顺
                 'allTriplets': isAllTriplets(),// 对对和
                 'threeConcealedTriplets': isThreeConcealedTriplets(),//三暗刻
+                'threeQuads': isThreeQuads(),//三杠子
                 'littleThreeDragons': isLittleThreeDragons(),//小三元
                 'pureTerminalHand': isPureTerminalHand(),//狭义混老头 不能是清老头 更不能是字一色
                 'terminalOrHonorInEveryGroup': isTerminalOrHonorInEveryGroup(),//狭义混全 不能是纯全 肯定更不能是字一色
                 'straight': isStraight(),//一气通贯
                 'terminalInEveryGroup': isTerminalInEveryGroup(),//纯全
+                //以下是传进来的参数
+                'riichi': 0,
+                'wRiichi': 0,
+                'menzenchinWinningDraw': 0,
+                'playerWind': 0,
+                'roundWind': 0,
+                'dragonTiles': 0,
+                'chankan': 0,
+                'deadWallDraw': 0,
+                'lastPick': 0,
+                'lastDiscard': 0,
+                'ippatsu': 0,
+
             }
-            
-            calFu(comb, gameAttr, yakuRes['flatHand'])
+            let doraRes = {
+                'dora': isDora(), // 宝牌
+                'redDora': isRedDora(), //红宝牌
+                'northDora': isNorthDora(), //拔北宝牌
+                'innerDora': isInnerDora(), //里宝牌
+            }
+            let han = 0, hanList = {}
+            for (let it in yakuRes) {
+                han += yakuRes[it]
+                if (yakuRes[it]) {
+                    hanList[it] = yakuRes[it]
+                }
+            }
+            if (!han) {
+                return 
+            }
+            for (let it in doraRes) {
+                han += doraRes[it]
+                if (doraRes[it]) {
+                    hanList[it] = doraRes[it]
+                }
+            }
+            const fu = calFu(comb, gameAttr, yakuRes['flatHand'])
+            const score =  getScore(han, fu, gameAttr.dealer, !gameAttr.discarder)
+            if (score > maxScore) {
+                maxScore = score
+                finalYakus = hanList
+            }
         }
         // 判断和牌数值有关的役种
         // 断幺九、混老头、清/混一色、表里红北宝牌
@@ -79,6 +134,11 @@ function calScore(obj) {
     // 算符数：
     // 1. 先看平和，如果没有，优先单骑、坎张和边张
     // 2. 七对子25符固定，门清自摸平和固定20符，门清荣和加10符，其他不满30符加到30
+}
+
+
+function getScore(han, fu, dealer, isTsumo) {
+    return 4 * Math.pow(2, han + 2) * fu
 }
 
 

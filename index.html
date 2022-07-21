@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahjong Score CLC</title>
+    <script src="./main.js"></script>
+    <script src="./yaku.js"></script>
+    <script src="./fu.js"></script>
+</head>
+<body>
+    <div style="margin-left: 12px;">
+        <input type="text" id="tiles">
+        <br />
+        <button id="submit" style="margin-top: 6px;">Submit</button>
+    </div>
+    <script>
+        document.getElementById('submit').onclick = () => {
+            let inputStr = document.getElementById('tiles').value
+            console.log(inputStr)
+            // inputStr => Hand + com + gameAttr
+            const inputArray = inputStr.split('|')
+            const handStr = inputArray[0];
+            const comStrs = inputArray.length > 1 ? 
+                inputArray.slice(1, inputArray.length) : []
+            const hand = handStr.split(' ').map(d => Number(d))
+            console.log(hand)
+            const combs = []
+            comStrs.forEach(it => {
+                combs.push(arr = it.split(' ').map(d => Number(d)))
+            });
+            const rawObj = {
+                hand: hand,
+                combination: combs,
+                gameAttr: {}
+            }
+            // testA();
+            calScore(rawObj)
+        }
+    </script>
+</body>
+</html>
