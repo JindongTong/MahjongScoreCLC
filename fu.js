@@ -1,4 +1,4 @@
-function calfu(combination, attrs, winFlatHand) {
+function calFu(combination, attrs, winFlatHand) {
     if (!combination.length) {
         return 25
     }

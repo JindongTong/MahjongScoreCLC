@@ -2,9 +2,10 @@
 
 function isTanyao(hand) {
     //1 9 11 19 21 29 31-37
+    console.log(hand)
     let yao = [1,9,11,19,21,29,31,32,33,34,35,36,37]
     for (let i = 0; i < yao.length; i++) {
-        if (hand.includes(i) === true) {
+        if (hand.includes(yao[i])) {
             return 0
         }
     }
@@ -49,13 +50,13 @@ function isMixedFlush(hand, visable) {
 
 function isPureFlush(hand, visable) {
     if (Math.max(...hand) < 10) {
-        return 3 - Number(visable)
+        return 6 - Number(visable)
     }
     if (Math.min(...hand) > 10 && Math.max(...hand) < 20) {
-        return 3 - Number(visable)
+        return 6 - Number(visable)
     }
     if (Math.min(...hand) > 20 && Math.max(...hand) < 30) {
-        return 3 - Number(visable)
+        return 6 - Number(visable)
     }
     return 0
 }
@@ -95,7 +96,7 @@ function isDoubleSequence(combination) {
     return 0
 }
 
- /*
+/*
 function isTripleTriplets(combination) {
     if(!combination.length) {
         return 0
